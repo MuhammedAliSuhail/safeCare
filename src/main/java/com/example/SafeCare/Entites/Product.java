@@ -26,11 +26,13 @@ public class Product {
     private String productName;
 
 
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name ="unitOfMeasurement",referencedColumnName = "UnitOfMeasurementId")
+    private UnitOfMeasurement unitMasherment;
 
-//    private UnitOfMeasurement unitMasherment;
-
-
-//    private Category category;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name ="category",referencedColumnName = "CategoryId")
+    private Category category;
 
     private double purchasePrice;
 

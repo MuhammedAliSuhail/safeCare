@@ -4,6 +4,7 @@ package com.example.SafeCare.Entites;
 import com.example.SafeCare.Entites.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Category {
 
 
@@ -22,6 +24,8 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer CategoryId;
 
+
+//    @Column(unique = true)
     private String CategoryName;
 
 

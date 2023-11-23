@@ -19,10 +19,15 @@ public class ProductController {
     @Autowired
     ProductServices productServices;
     @PostMapping("/addProduct")
-    public String addProduct(@RequestBody addProductDTO productDTO){
+    public String addProduct(@RequestBody addProductDTO productDTO) throws Exception {
+        System.out.println(productDTO.getProductName());
+        System.out.println(productDTO.getSellingPrice());
+          try{
+              return productServices.addProduct(productDTO);
+          }catch (Exception e){
+              throw new Exception(e);
+          }
 
-
-        return productServices.addProduct(productDTO);
 
 
     }
