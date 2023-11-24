@@ -32,7 +32,7 @@ try{
     }
 }catch (Exception e){
 
-    log.error("unexpected");
+    log.error(String.valueOf(e));
     throw new Exception("Something went wrong!");
 
 }

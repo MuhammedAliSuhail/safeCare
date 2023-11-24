@@ -35,8 +35,8 @@ public class ProductServices {
     UnitOfMeasurementRepo unitOfMeasurementRepo;
 
     public String addProduct(addProductDTO product) throws Exception {
-try{
 
+try{
     Optional<Category> category= Optional.ofNullable(categoryRepo.findName(product.getCategory()));
 
     if(!category.isPresent()){
@@ -67,10 +67,12 @@ try{
         logger.warn("the product name is already exist");
         return "product name is already present";
     }
+
 }catch (Exception e){
     logger.error(String.valueOf(e));
-    return "something went wrong";
+    return "something went wrong!";
 }
+
 
 
     }
