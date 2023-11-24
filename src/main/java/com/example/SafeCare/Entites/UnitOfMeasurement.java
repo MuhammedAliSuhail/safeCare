@@ -24,7 +24,7 @@ public class UnitOfMeasurement {
     private Integer UnitOfMeasurementId;
 
 
-//    @Column(unique = true)
+    @Column(unique = true)
     private String  UnitOfMeasurementName;
 
 //    @OneToMany(mappedBy = "unitMasherment",cascade = CascadeType.ALL)

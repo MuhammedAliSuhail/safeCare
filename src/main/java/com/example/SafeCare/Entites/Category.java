@@ -25,7 +25,7 @@ public class Category {
     private Integer CategoryId;
 
 
-//    @Column(unique = true)
+    @Column(unique = true)
     private String CategoryName;
 
 
