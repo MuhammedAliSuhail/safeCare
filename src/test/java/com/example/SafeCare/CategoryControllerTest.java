@@ -34,11 +34,12 @@ public class CategoryControllerTest {
         when(categoryServices.addCategory(anyString())).thenReturn("Category added successfully");
 
         // Perform the test by invoking the controller method
-        String result = categoryController.addCategory("nano");
+        String result = String.valueOf(categoryController.addCategory("nano"));
 
         // Verify the result
         assertEquals("Category added successfully", result);
     }
+
 
 
 }

@@ -41,7 +41,7 @@ public class productControllerTest {
         mockProductDTO.setUnitMasherment("cm"); // Set other necessary fields
 
         // Perform the test by invoking the controller method
-        String result = productController.addProduct(mockProductDTO);
+        String result = String.valueOf(productController.addProduct(mockProductDTO));
 
         // Verify the result
         assertEquals("Product added successfully", result);

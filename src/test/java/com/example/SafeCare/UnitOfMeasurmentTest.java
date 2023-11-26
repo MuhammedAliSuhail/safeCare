@@ -1,8 +1,6 @@
 package com.example.SafeCare;
 
-import com.example.SafeCare.Controller.CategoryController;
-import com.example.SafeCare.Controller.UnitOfMeasurmentController;
-import com.example.SafeCare.Services.CategoryServices;
+import com.example.SafeCare.Controller.UnitOfMeasurementController;
 import com.example.SafeCare.Services.UnitOfMeasurementServices;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +18,7 @@ public class UnitOfMeasurmentTest {
     private UnitOfMeasurementServices unitOfMeasurementServices;
 
     @InjectMocks
-    private UnitOfMeasurmentController unitOfMeasurmentController;
+    private UnitOfMeasurementController unitOfMeasurementController;
 
     @BeforeEach
     public void setup() {
@@ -30,17 +28,17 @@ public class UnitOfMeasurmentTest {
     @Test
     public void testAddUnit() throws Exception {
         // Mock the behavior of categoryServices.addCategory()
-        when(unitOfMeasurementServices.addUnitOfMeasurment(anyString())).thenReturn("unit of Measurement is added");
+        when(unitOfMeasurementServices.addUnitOfMeasurement(anyString())).thenReturn("unit of Measurement is added");
 
         // Perform the test by invoking the controller method
-        String result = unitOfMeasurmentController.addUnitOfmeasurment("mac");
+        String result = unitOfMeasurementController.addUnitOfmeasurment("mac");
 
         // Verify the result
         assertEquals("unit of Measurement is added", result);
-        when(unitOfMeasurementServices.addUnitOfMeasurment(anyString())).thenReturn("unit is already exist");
+        when(unitOfMeasurementServices.addUnitOfMeasurement(anyString())).thenReturn("unit is already exist");
 
         // Perform the test by invoking the controller method
-        String result2 = unitOfMeasurmentController.addUnitOfmeasurment("mac");
+        String result2 = unitOfMeasurementController.addUnitOfmeasurment("mac");
         assertEquals("unit is already exist", result2);
     }
 
