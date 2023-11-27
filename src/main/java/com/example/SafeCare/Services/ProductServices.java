@@ -2,7 +2,7 @@ package com.example.SafeCare.Services;
 
 
 import com.example.SafeCare.CustomException.CategoryNotFound;
-import com.example.SafeCare.CustomException.ProductException;
+import com.example.SafeCare.CustomException.ProductNotException;
 import com.example.SafeCare.CustomException.UnitNotException;
 import com.example.SafeCare.CustomException.customException;
 import com.example.SafeCare.Entites.Category;
@@ -94,7 +94,7 @@ try{
         try{
             Optional<Product> product=productRepo.findById(id);
             if(!product.isPresent()){
-               throw new ProductException();
+               throw new ProductNotException();
             }
             Product product1=product.get();
 
@@ -129,9 +129,9 @@ try{
             logger.error(String.valueOf(e));
             throw new UnitNotException();
 
-        }catch (ProductException e){
+        }catch (ProductNotException e){
             logger.error(String.valueOf(e));
-            throw new ProductException();
+            throw new ProductNotException();
         }catch (Exception e){
             logger.error(String.valueOf(e));
           throw new customException("Something went wrong!");
@@ -146,7 +146,7 @@ try{
         try{
             Optional<Product> product=productRepo.findById(id);
             if(!product.isPresent()){
-                throw new ProductException();
+                throw new ProductNotException();
             }
             Product product1=product.get();
             product1.setCategory(null);
@@ -155,9 +155,11 @@ try{
             productRepo.delete(product1);
 
             return "deleted successfully";
-        }catch (ProductException e){
-            throw new ProductException();
+        }catch (ProductNotException e){
+            logger.error(String.valueOf(e));
+            throw new ProductNotException();
         }catch (Exception e){
+            logger.error(String.valueOf(e));
             throw new customException("Something went wrong !");
         }
 
