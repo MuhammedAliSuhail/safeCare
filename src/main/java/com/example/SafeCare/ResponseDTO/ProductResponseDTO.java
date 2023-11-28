@@ -20,7 +20,7 @@ public class ProductResponseDTO {
 
 
 
-    private String unitMasherment;
+    private String unitMeasurement;
 
 
     private String category;

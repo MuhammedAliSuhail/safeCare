@@ -6,8 +6,11 @@ import com.example.SafeCare.CustomException.UnitIsalreadyInUse;
 import com.example.SafeCare.CustomException.customException;
 import com.example.SafeCare.Entites.Product;
 import com.example.SafeCare.Entites.UnitOfMeasurement;
+import com.example.SafeCare.Exception.IoExceptionCustom;
+import com.example.SafeCare.Exception.ValidationException;
 import com.example.SafeCare.Repository.ProductRepo;
 import com.example.SafeCare.Repository.UnitOfMeasurementRepo;
+import com.example.SafeCare.ResponseDTO.UnitOfMeasurementResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +30,7 @@ public class UnitOfMeasurementServices {
 
     @Autowired
     ProductRepo productRepo;
-    public String addUnitOfMeasurement(String unit) throws Exception {
+    public UnitOfMeasurementResponseDTO addUnitOfMeasurement(String unit) throws Exception {
 try{
     Optional<UnitOfMeasurement> unitOfMeasurementOptional=Optional.ofNullable(unitOfMeasurementRepo.findName(unit));
     if(!unitOfMeasurementOptional.isPresent()){
@@ -36,17 +39,18 @@ try{
 
         unitOfMeasurementRepo.save(unitOfMeasurement);
   log.info(unit+"is successfully saved");
-        return "unit of Measurement is added";
+        UnitOfMeasurementResponseDTO  unitOfMeasurementResponseDTO=new UnitOfMeasurementResponseDTO(unit);
+        return unitOfMeasurementResponseDTO;
     }else{
         log.warn(unit+"is already exist");
-        throw new UnitIsalreadyInUse(unit);
+        throw new ValidationException("200","unit is already exist","0");
     }
-}catch (UnitIsalreadyInUse e){
-    throw new UnitIsalreadyInUse(unit);
+}catch (ValidationException vx){
+    throw vx;
 }catch (Exception e){
 
     log.error(String.valueOf(e));
-    throw new customException("Something went wrong!");
+    throw e;
 
 }
 
@@ -55,28 +59,34 @@ try{
     }
 
 
-    public String editUnitOfMeasurement(Integer id, String newName) throws Exception {
+    public UnitOfMeasurementResponseDTO editUnitOfMeasurement(Integer id, String newName) throws Exception {
 
         try{
             Optional<UnitOfMeasurement> unitOfMeasurementOptional=unitOfMeasurementRepo.findById(id);
 
 
             if(!unitOfMeasurementOptional.isPresent()){
-                throw new UnitNotException();
+                throw new IoExceptionCustom("200","id not present","0");
             }
             UnitOfMeasurement unitOfMeasurement=unitOfMeasurementOptional.get();
+            Optional<UnitOfMeasurement> unitOfMeasurementOptional1=Optional.ofNullable(unitOfMeasurementRepo.findName(newName));
+            if(unitOfMeasurementOptional1.isPresent()){
+                throw new ValidationException("200","unit name is already present","0");
+            }
 
             unitOfMeasurement.setUnitOfMeasurementName(newName);
 
             unitOfMeasurementRepo.save(unitOfMeasurement);
-
-            return "updated";
-        }catch (UnitNotException e){
-            log.error(String.valueOf(e));
-            throw new UnitNotException();
+               UnitOfMeasurementResponseDTO unitOfMeasurementResponseDTO=new UnitOfMeasurementResponseDTO(newName);
+            return unitOfMeasurementResponseDTO;
+        }catch (IoExceptionCustom ex){
+            throw ex;
+        }catch (ValidationException vx){
+            log.error(String.valueOf(vx));
+            throw vx;
         }catch (Exception e){
             log.error(String.valueOf(e));
-            throw new customException("Something went wrong!");
+            throw e;
         }
 
 
@@ -84,11 +94,11 @@ try{
     }
 
 
-    public String DeleteUnitOfMeasurement(Integer id) throws Exception {
+    public UnitOfMeasurementResponseDTO DeleteUnitOfMeasurement(Integer id) throws Exception {
         try {
             Optional<UnitOfMeasurement> unitOfMeasurementOptional = unitOfMeasurementRepo.findById(id);
             if (!unitOfMeasurementOptional.isPresent()) {
-              throw new UnitNotException();
+              throw new IoExceptionCustom("200","id not present","0");
             }
             UnitOfMeasurement unitOfMeasurement = unitOfMeasurementOptional.get();
 
@@ -96,39 +106,41 @@ try{
 
             for (Product product : productList) {
                 if (unitOfMeasurement.equals(product.getUnitMasherment())) {
-                    throw new UnitIsalreadyInUse(id);
+                    throw new ValidationException("200","unit is already in use","0");
                 }
             }
 
             unitOfMeasurementRepo.delete(unitOfMeasurement);
+            UnitOfMeasurementResponseDTO unitOfMeasurementResponseDTO=new UnitOfMeasurementResponseDTO(unitOfMeasurement.getUnitOfMeasurementName());
 
-            return "deleted";
+            return unitOfMeasurementResponseDTO;
         }
-      catch(UnitNotException e){
-          log.error(String.valueOf(e));
-            throw new UnitNotException();
-        }  catch (UnitIsalreadyInUse e){
+      catch(ValidationException vx){
+          log.error(String.valueOf(vx));
+            throw vx;
+        }catch (IoExceptionCustom ex){
+            throw ex;
+        }
+        catch (Exception e){
             log.error(String.valueOf(e));
-            throw new UnitIsalreadyInUse(id);
-        }catch (Exception e){
-            log.error(String.valueOf(e));
-            throw new customException("something went wrong!");
+            throw e;
         }
 
     }
 
 
-    public List<String> allUnits() throws customException {
+    public List<UnitOfMeasurementResponseDTO> allUnits() throws customException {
   try{
       List<UnitOfMeasurement> unitOfMeasurements=unitOfMeasurementRepo.findAll();
-      List<String> unitList=new ArrayList<>();
+      List<UnitOfMeasurementResponseDTO> unitList=new ArrayList<>();
       for(UnitOfMeasurement unitOfMeasurement:unitOfMeasurements){
-          unitList.add(unitOfMeasurement.getUnitOfMeasurementName());
+          UnitOfMeasurementResponseDTO unitOfMeasurementResponseDTO=new UnitOfMeasurementResponseDTO(unitOfMeasurement.getUnitOfMeasurementName());
+          unitList.add(unitOfMeasurementResponseDTO);
       }
       return unitList;
   }catch (Exception e){
       log.error(String.valueOf(e));
-      throw new customException("Something went Wrong!");
+      throw e;
   }
 
     }

@@ -7,8 +7,11 @@ import com.example.SafeCare.CustomException.customException;
 import com.example.SafeCare.Entites.Category;
 import com.example.SafeCare.Entites.Product;
 import com.example.SafeCare.Entites.UnitOfMeasurement;
+import com.example.SafeCare.Exception.IoExceptionCustom;
+import com.example.SafeCare.Exception.ValidationException;
 import com.example.SafeCare.Repository.CategoryRepo;
 import com.example.SafeCare.Repository.ProductRepo;
+import com.example.SafeCare.ResponseDTO.CategoryResponseDTO;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +34,7 @@ public class CategoryServices {
     @Autowired
     ProductRepo productRepo;
 
-    public String addCategory(String CategoryName) throws Exception {
+    public CategoryResponseDTO addCategory(String CategoryName) throws Exception {
 try{
     Optional<Category> category1=Optional.ofNullable(categoryRepo.findName(CategoryName));
     if(!category1.isPresent()){
@@ -39,13 +42,16 @@ try{
         categoryRepo.save(category);
 
         log.info(CategoryName+"is successfully created");
-        return "Category added successfully";
+        CategoryResponseDTO categoryResponseDTO=new CategoryResponseDTO(CategoryName);
+        return categoryResponseDTO;
 
     }else{
         log.warn(CategoryName +"is already is present");
-         return "Category name is already exist";
+        throw new ValidationException("200","is already is present","0");
 
     }
+}catch (ValidationException vx){
+    throw vx;
 }catch (Exception e){
 log.error(String.valueOf(e));
 
@@ -59,27 +65,35 @@ throw new customException("something went wrong!");
     }
 
 
-    public String editCategory(Integer id, String newName) throws Exception {
+    public CategoryResponseDTO editCategory(Integer id, String newName) throws Exception {
        try{
            Optional<Category> CategoryOptional=categoryRepo.findById(id);
 
            if(!CategoryOptional.isPresent()){
-               throw new CategoryNotFound();
+               throw new IoExceptionCustom("200","id not present","0");
+           }
+           Optional<Category> category1=Optional.ofNullable(categoryRepo.findName(newName));
+           if (category1.isPresent()){
+               throw new ValidationException("200","id is not present","0");
            }
            Category category=CategoryOptional.get();
 
            category.setCategoryName(newName);
 
            categoryRepo.save(category);
+           CategoryResponseDTO categoryResponseDTO=new CategoryResponseDTO(newName);
 
-           return "updated";
-       }catch (CategoryNotFound e){
+           return categoryResponseDTO;
+       }catch (IoExceptionCustom ex){
+           throw ex;
 
-           log.error(String.valueOf(e));
-           throw new CategoryNotFound();
+       }catch (ValidationException vx){
+
+
+           throw vx;
        }catch (Exception e){
-           log.error(String.valueOf(e));
-           throw new customException("something went wrong !");
+         throw e;
+
        }
 
 
@@ -90,12 +104,12 @@ throw new customException("something went wrong!");
     }
 
 
-    public String DeleteCategory(Integer id) throws Exception {
+    public CategoryResponseDTO DeleteCategory(Integer id) throws Exception {
         try{
             Optional<Category> category=categoryRepo.findById(id);
             if(!category.isPresent()){
                 log.warn(String.valueOf(id));
-                return "id not present";
+                throw new ValidationException("200","id not present","0");
             }
             Category category1=category.get();
 
@@ -103,37 +117,38 @@ throw new customException("something went wrong!");
 
             for(Product product:productList){
                 if(category1.equals(product.getCategory())){
-                   throw new CategoryExeption();
+                   throw new ValidationException("200","Category is already in use","0");
                 }
             }
 
             categoryRepo.delete(category1);
+             CategoryResponseDTO categoryResponseDTO=new CategoryResponseDTO(category1.getCategoryName());
+            return categoryResponseDTO;
 
-            return "deleted";
 
-
-        } catch (CategoryExeption e) {
-            log.error(String.valueOf(e));
-            throw new CategoryExeption();
+        } catch (ValidationException vx) {
+            log.error(String.valueOf(vx));
+            throw vx;
         }catch (Exception e){
             log.error(String.valueOf(e));
-            throw new customException("something went wrong !");
+            throw e;
         }
 
     }
 
 
-    public List<String> allCategory() throws customException {
+    public List<CategoryResponseDTO> allCategory() throws customException {
   try {
       List<Category> categoryList=categoryRepo.findAll();
-      List<String> catList=new ArrayList<>();
+      List<CategoryResponseDTO> catList=new ArrayList<>();
       for(Category category:categoryList){
-          catList.add(category.getCategoryName());
+          CategoryResponseDTO categoryResponseDTO=new CategoryResponseDTO(category.getCategoryName());
+          catList.add(categoryResponseDTO);
       }
       return catList;
   }catch (Exception e){
       log.error(String.valueOf(e));
-      throw new customException("something went wrong!");
+      throw e;
 
   }
 
