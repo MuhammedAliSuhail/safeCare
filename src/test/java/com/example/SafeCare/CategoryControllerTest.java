@@ -1,8 +1,11 @@
 package com.example.SafeCare;
 
 import com.example.SafeCare.Controller.CategoryController;
+import com.example.SafeCare.Exception.ValidationException;
+import com.example.SafeCare.Response.GenerateGlobalResponse;
+import com.example.SafeCare.Response.GlobalResponse;
+import com.example.SafeCare.ResponseDTO.CategoryResponseDTO;
 import com.example.SafeCare.Services.CategoryServices;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -10,117 +13,80 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-
-import java.util.Arrays;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-public class CategoryControllerTest {
+class CategoryControllerTest {
+
 //    @Mock
 //    private CategoryServices categoryServices;
+//
+//    @Mock
+//    private GenerateGlobalResponse generateGlobalResponse;
 //
 //    @InjectMocks
 //    private CategoryController categoryController;
 //
-//    @BeforeEach
-//    public void setup() {
-//        MockitoAnnotations.openMocks(this);
+//    public CategoryControllerTest() {
+//        MockitoAnnotations.initMocks(this);
 //    }
 //
 //    @Test
-//    public void testAddCategory_Success() throws Exception {
-//        // Mocking behavior of categoryServices.addCategory
-//        String categoryName = "TestCategory";
-//        when(categoryServices.addCategory(categoryName)).thenReturn("Category added successfully");
+//    void testAddCategorySuccess() throws Exception {
+//        // Mocking successful category addition
+//        @Mock
+//        CategoryServices categoryServices;
 //
-//        // Testing addCategory method
-//        ResponseEntity<String> response = categoryController.addCategory(categoryName);
+//        @Mock
+//        GenerateGlobalResponse generateGlobalResponse;
 //
-//        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-//        assertEquals("Category added successfully", response.getBody());
+//        @InjectMocks
+//        CategoryController categoryController;
+//
+//    public CategoryControllerTest() {
+//            MockitoAnnotations.initMocks(this);
+//        }
+//
+//        @Test
+//        void testAddCategorySuccess() throws Exception {
+//            // Mocking successful category addition
+//            when(categoryServices.addCategory(anyString())).thenReturn(/* Mocked category response */);
+//
+//            // Mocking generateGlobalResponse behavior for success scenario
+//            when(generateGlobalResponse.generateGlobalResponse(
+//                    any(), eq("2"), eq("200"), eq("Category added successfully")))
+//                    .thenReturn(/* Mocked success response */);
+//
+//            // Perform the controller action
+//            ResponseEntity response = categoryController.addCategory("TestCategory");
+//
+//            // Verify the response
+//            assertEquals(HttpStatus.OK, response.getStatusCode());
+//            // Add more assertions as needed for the response body
+//        }
+//
 //    }
 //
-//    @Test
-//    public void testAddCategory_Exception() throws Exception {
-//        // Mocking behavior of categoryServices.addCategory to throw an exception
-//        String categoryName = "TestCategory";
-//        when(categoryServices.addCategory(categoryName)).thenThrow(new Exception("Failed to add category"));
 //
-//        // Testing addCategory method for exception scenario
-//        ResponseEntity<String> response = categoryController.addCategory(categoryName);
 //
-//        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-//        assertEquals("Failed to add category", response.getBody());
-//    }
-//    @Test
-//    public void testEditCategory_Success() throws Exception {
-//        // Mocking behavior of categoryServices.editCategory
-//        int categoryId = 1;
-//        String newName = "NewCategoryName";
-//        when(categoryServices.editCategory(categoryId, newName)).thenReturn("Category updated successfully");
-//
-//        // Testing editCategory method
-//        ResponseEntity<String> response = categoryController.editCategory(categoryId, newName);
-//
-//        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-//        assertEquals("Category updated successfully", response.getBody());
-//    }
 //
 //    @Test
-//    public void testEditCategory_Exception() throws Exception{
-//        // Mocking behavior of categoryServices.editCategory to throw an exception
-//        int categoryId = 1;
-//        String newName = "NewCategoryName";
-//        when(categoryServices.editCategory(categoryId, newName)).thenThrow(new Exception("Failed to edit category"));
+//    void testAddCategoryValidationException() throws Exception{
+//        // Mocking ValidationException scenario
+//        when(categoryServices.addCategory(anyString())).thenThrow(new ValidationException("200","is already is present","0"));
+//        when(generateGlobalResponse.generateGlobalResponse(eq(null), anyString(), anyString(), anyString()))
+//                .thenReturn(null);
 //
-//        // Testing editCategory method for exception scenario
-//        ResponseEntity<String> response = categoryController.editCategory(categoryId, newName);
+//        // Perform the controller action
+//        ResponseEntity response = categoryController.addCategory("InvalidCategory");
 //
-//        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-//        assertEquals("Failed to edit category", response.getBody());
-//    }
-//    @Test
-//    public void testDeleteCategory_Success() throws Exception {
-//        // Mocking behavior of categoryServices.DeleteCategory
-//        int categoryId = 1;
-//        when(categoryServices.DeleteCategory(categoryId)).thenReturn("Category deleted successfully");
-//
-//        // Testing DeleteCategory method
-//        ResponseEntity<String> response = categoryController.DeleteCategory(categoryId);
-//
-//        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-//        assertEquals("Category deleted successfully", response.getBody());
-//    }
-//
-//    @Test
-//    public void testDeleteCategory_Exception() throws Exception {
-//        // Mocking behavior of categoryServices.DeleteCategory to throw an exception
-//        int categoryId = 1;
-//        when(categoryServices.DeleteCategory(categoryId)).thenThrow(new Exception("Failed to delete category"));
-//
-//        // Testing DeleteCategory method for exception scenario
-//        ResponseEntity<String> response = categoryController.DeleteCategory(categoryId);
-//
-//        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-//        assertEquals("Failed to delete category", response.getBody());
-//    }
-//    @Test
-//    public void testAllCategory_Success() throws Exception {
-//        // Mocking behavior of categoryServices.allCategory
-//        List<String> categories = Arrays.asList("Category1", "Category2", "Category3");
-//        when(categoryServices.allCategory()).thenReturn(categories);
-//
-//        // Testing allCategory method
-//        ResponseEntity<List<String>> response = categoryController.allCategory();
-//
-//        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-//        assertEquals(categories, response.getBody());
+//        // Verify the response
+//        assertEquals(HttpStatus.OK, response.getStatusCode());
+//        // Add more assertions as needed for the response body
+//        // For example, verify the content of the response body
+//        assertEquals("ErrorResponse", response.getBody());
 //    }
 
-
-
+    // Add more test cases for IoExceptionCustom, other exceptions, etc.
 }

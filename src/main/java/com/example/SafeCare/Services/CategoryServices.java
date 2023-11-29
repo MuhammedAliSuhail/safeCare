@@ -1,9 +1,7 @@
 package com.example.SafeCare.Services;
 
 
-import com.example.SafeCare.CustomException.CategoryExeption;
-import com.example.SafeCare.CustomException.CategoryNotFound;
-import com.example.SafeCare.CustomException.customException;
+
 import com.example.SafeCare.Entites.Category;
 import com.example.SafeCare.Entites.Product;
 import com.example.SafeCare.Entites.UnitOfMeasurement;
@@ -47,7 +45,7 @@ try{
 
     }else{
         log.warn(CategoryName +"is already is present");
-        throw new ValidationException("200","is already is present","0");
+        throw new ValidationException("400","is already is present","1");
 
     }
 }catch (ValidationException vx){
@@ -55,7 +53,7 @@ try{
 }catch (Exception e){
 log.error(String.valueOf(e));
 
-throw new customException("something went wrong!");
+throw e;
 
 }
 
@@ -74,7 +72,7 @@ throw new customException("something went wrong!");
            }
            Optional<Category> category1=Optional.ofNullable(categoryRepo.findName(newName));
            if (category1.isPresent()){
-               throw new ValidationException("200","id is not present","0");
+               throw new ValidationException("400","product name is already present","1");
            }
            Category category=CategoryOptional.get();
 
@@ -109,7 +107,7 @@ throw new customException("something went wrong!");
             Optional<Category> category=categoryRepo.findById(id);
             if(!category.isPresent()){
                 log.warn(String.valueOf(id));
-                throw new ValidationException("200","id not present","0");
+                throw new ValidationException("400","id not present","1");
             }
             Category category1=category.get();
 
@@ -117,7 +115,7 @@ throw new customException("something went wrong!");
 
             for(Product product:productList){
                 if(category1.equals(product.getCategory())){
-                   throw new ValidationException("200","Category is already in use","0");
+                   throw new ValidationException("400","Category is already in use","1");
                 }
             }
 
@@ -137,7 +135,7 @@ throw new customException("something went wrong!");
     }
 
 
-    public List<CategoryResponseDTO> allCategory() throws customException {
+    public List<CategoryResponseDTO> allCategory() throws Exception {
   try {
       List<Category> categoryList=categoryRepo.findAll();
       List<CategoryResponseDTO> catList=new ArrayList<>();

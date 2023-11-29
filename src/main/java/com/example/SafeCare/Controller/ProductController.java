@@ -1,7 +1,7 @@
 package com.example.SafeCare.Controller;
 
 
-import com.example.SafeCare.CustomException.customException;
+
 import com.example.SafeCare.Entites.Product;
 import com.example.SafeCare.Exception.IoExceptionCustom;
 import com.example.SafeCare.Exception.ValidationException;
@@ -31,7 +31,7 @@ public class ProductController {
     @Autowired
     ProductServices productServices;
     @PostMapping("/addProduct")
-    public ResponseEntity<String> addProduct(@RequestBody addProductDTO productDTO)  {
+    public ResponseEntity addProduct(@RequestBody addProductDTO productDTO)  {
 
         try {
             return new ResponseEntity(generateGlobalResponse.generateGlobalResponse(productServices.addProduct(productDTO), "2"
@@ -64,7 +64,7 @@ public class ProductController {
     }
 
     @PutMapping("/editProduct")
-    public ResponseEntity<String> editProduct(@RequestParam Integer id, @RequestBody addProductDTO productDTO){
+    public ResponseEntity editProduct(@RequestParam Integer id, @RequestBody addProductDTO productDTO){
 
         try {
             return new ResponseEntity(generateGlobalResponse.generateGlobalResponse(productServices.editProduct(id,productDTO), "2"
@@ -93,7 +93,7 @@ public class ProductController {
 
 
     @DeleteMapping("/DeleteProduct")
-    public ResponseEntity<String> deleteProduct(Integer id)  {
+    public ResponseEntity deleteProduct(Integer id)  {
         try {
             return new ResponseEntity(generateGlobalResponse.generateGlobalResponse(productServices.deleteProduct(id), "2"
                     ,"200","Product added successfully "),HttpStatus.OK);
@@ -120,7 +120,7 @@ public class ProductController {
 
     }
     @GetMapping("/allProducts")
-    public ResponseEntity<List<ProductResponseDTO>> allProduct(){
+    public ResponseEntity allProduct(){
 
         try {
             return new ResponseEntity(generateGlobalResponse.generateGlobalResponse(productServices.allproducts(), "2"

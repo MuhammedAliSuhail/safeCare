@@ -1,131 +1,93 @@
 package com.example.SafeCare;
 
 import com.example.SafeCare.Controller.UnitOfMeasurementController;
+import com.example.SafeCare.Exception.ValidationException;
+import com.example.SafeCare.Response.GenerateGlobalResponse;
+import com.example.SafeCare.Response.GlobalResponse;
+import com.example.SafeCare.ResponseDTO.UnitOfMeasurementResponseDTO;
 import com.example.SafeCare.Services.UnitOfMeasurementServices;
-import org.assertj.core.util.Arrays;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
-public class UnitOfMeasurmentTest {
-
+//public class UnitOfMeasurmentTest {
+//
 //
 //    @Mock
-//    private UnitOfMeasurementServices unitOfMeasurementServices;
+//    UnitOfMeasurementServices unitOfMeasurementServices;
+//
+//    @Mock
+//    GenerateGlobalResponse generateGlobalResponse;
 //
 //    @InjectMocks
-//    private UnitOfMeasurementController unitOfMeasurementController;
-//
-//    @BeforeEach
-//    public void setup() {
-//        MockitoAnnotations.openMocks(this);
-//    }
+//    UnitOfMeasurementController unitOfMeasurementController;
 //
 //    @Test
-//    public void testAddUnitOfmeasurment_Success() throws Exception {
-//        // Mocking behavior of unitOfMeasurementServices.addUnitOfMeasurement
-//        String unitOfMeasurement = "TestUnit";
-//        when(unitOfMeasurementServices.addUnitOfMeasurement(unitOfMeasurement)).thenReturn("Unit added successfully");
+//    void testAddUnitOfMeasurement_Success() throws Exception {
+
 //
-//        // Testing addUnitOfmeasurment method
-//        ResponseEntity<String> response = unitOfMeasurementController.addUnitOfmeasurment(unitOfMeasurement);
 //
-//        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-//        assertEquals("Unit added successfully", response.getBody());
-//    }
+//            // Mocking a successful scenario
+//            UnitOfMeasurementResponseDTO unitOfMeasurementResponseDTO = new UnitOfMeasurementResponseDTO("newUnit");
+//            GlobalResponse globalResponse=new GlobalResponse();
+//            globalResponse.setResponseMessage("newMessage");
+//            globalResponse.setStatusCode("200");
+//            globalResponse.setResponseIndicator("2");
+//            globalResponse.setResponse(unitOfMeasurementResponseDTO);
+//            when(unitOfMeasurementServices.addUnitOfMeasurement("newUnit")).thenReturn(unitOfMeasurementResponseDTO);
+//            when(generateGlobalResponse.generateGlobalResponse(unitOfMeasurementResponseDTO, "2", "200", "Unit added successfully"))
+////                    .thenReturn(ResponseEntity.ok().body("SuccessResponse"));
+//                    .thenReturn();
+//            ResponseEntity response = unitOfMeasurementController.addUnitOfmeasurment("ValidUnit");
 //
+//            assertEquals(HttpStatus.OK, response.getStatusCode());
+//            assertEquals("SuccessResponse", response.getBody());
+//        }
 //    @Test
-//    public void testAddUnitOfmeasurment_Exception() throws Exception {
-//        // Mocking behavior of unitOfMeasurementServices.addUnitOfMeasurement to throw an exception
-//        String unitOfMeasurement = "TestUnit";
-//        when(unitOfMeasurementServices.addUnitOfMeasurement(unitOfMeasurement)).thenThrow(new Exception("Failed to add unit"));
+//    void testEditUnitOfMeasurement_ValidationException() throws Exception {
+//        int id = 1;
+//        String newName = "InvalidUnitName";
 //
-//        // Testing addUnitOfmeasurment method for exception scenario
-//        ResponseEntity<String> response = unitOfMeasurementController.addUnitOfmeasurment(unitOfMeasurement);
+//        doThrow(new ValidationException("Validation error", "1", "400"))
+//                .when(unitOfMeasurementServices).editUnitOfMeasurement(id, newName);
+//        when(generateGlobalResponse.generateGlobalResponse(null, "1", "400", "Validation error"))
+//                .thenReturn(ResponseEntity.badRequest().body("ValidationError"));
+//
+//        ResponseEntity response = unitOfMeasurementController.editunitofmeasurment(id, newName);
 //
 //        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-//        assertEquals("Failed to add unit", response.getBody());
-//    }
-//    @Test
-//    public void testEditUnitOfMeasurement_Success()  throws Exception{
-//        // Mocking behavior of unitOfMeasurementServices.editUnitOfMeasurement
-//        int unitId = 1;
-//        String newName = "NewUnitName";
-//        when(unitOfMeasurementServices.editUnitOfMeasurement(unitId, newName)).thenReturn("Unit edited successfully");
-//
-//        // Testing editunitofmeasurment method
-//        ResponseEntity<String> response = unitOfMeasurementController.editunitofmeasurment(unitId, newName);
-//
-//        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-//        assertEquals("Unit edited successfully", response.getBody());
-//    }
-//
-//    @Test
-//    public void testEditUnitOfMeasurement_Exception() throws Exception{
-//        // Mocking behavior of unitOfMeasurementServices.editUnitOfMeasurement to throw an exception
-//        int unitId = 1;
-//        String newName = "NewUnitName";
-//        when(unitOfMeasurementServices.editUnitOfMeasurement(unitId, newName)).thenThrow(new Exception("Failed to edit unit"));
-//
-//        // Testing editunitofmeasurment method for exception scenario
-//        ResponseEntity<String> response = unitOfMeasurementController.editunitofmeasurment(unitId, newName);
-//
-//        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-//        assertEquals("Failed to edit unit", response.getBody());
-//    }
-//    @Test
-//    public void testDeleteUnitOfMeasurement_Success() throws Exception{
-//        // Mocking behavior of unitOfMeasurementServices.DeleteUnitOfMeasurement
-//        int unitId = 1;
-//        when(unitOfMeasurementServices.DeleteUnitOfMeasurement(unitId)).thenReturn("Unit deleted successfully");
-//
-//        // Testing deleteUnitOfMeasurement method
-//        ResponseEntity<String> response = unitOfMeasurementController.deleteUnitOfMeasurement(unitId);
-//
-//        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-//        assertEquals("Unit deleted successfully", response.getBody());
-//    }
-//
-//    @Test
-//    public void testDeleteUnitOfMeasurement_Exception() throws Exception{
-//        // Mocking behavior of unitOfMeasurementServices.DeleteUnitOfMeasurement to throw an exception
-//        int unitId = 1;
-//        when(unitOfMeasurementServices.DeleteUnitOfMeasurement(unitId)).thenThrow(new Exception("Failed to delete unit"));
-//
-//        // Testing deleteUnitOfMeasurement method for exception scenario
-//        ResponseEntity<String> response = unitOfMeasurementController.deleteUnitOfMeasurement(unitId);
-//
-//        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-//        assertEquals("Failed to delete unit", response.getBody());
-//    }
-//    @Test
-//    public void testAllUnits_Success() throws Exception {
-//        // Mocking behavior of unitOfMeasurementServices.allUnits
-//        List<String> units = new ArrayList<>();
-//
-//        units.add("unit1");
-//        units.add("unit2");
-//        units.add("unit3");
-//
-//        when(unitOfMeasurementServices.allUnits()).thenReturn(units);
-//
-//        // Testing allunits method
-//        ResponseEntity<List<String>> response = unitOfMeasurementController.allunits();
-//
-//        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-//        assertEquals(units, response.getBody());
+//        assertEquals("ValidationError", response.getBody());
 //    }
 
 
-}
+//        @Test
+//        void testAddUnitOfMeasurement_ValidationException () throws Exception {
+//            // Mocking a ValidationException scenario
+//            doThrow(new ValidationException("Validation error", "1", "400"))
+//                    .when(unitOfMeasurementServices).addUnitOfMeasurement(anyString());
+//            when(generateGlobalResponse.generateGlobalResponse(null, "1", "400", "Validation error"))
+//                    .thenReturn(ResponseEntity.badRequest().body("ValidationError"));
+//
+//            ResponseEntity response = unitOfMeasurementController.addUnitOfmeasurment("InvalidUnit");
+//
+//            assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+//            assertEquals("ValidationError", response.getBody());
+//        }
+//
+//    }
+
+
+
+
+
+
+
+
+

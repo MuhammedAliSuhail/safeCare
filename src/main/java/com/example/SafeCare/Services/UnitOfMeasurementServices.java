@@ -1,9 +1,7 @@
 package com.example.SafeCare.Services;
 
 
-import com.example.SafeCare.CustomException.UnitNotException;
-import com.example.SafeCare.CustomException.UnitIsalreadyInUse;
-import com.example.SafeCare.CustomException.customException;
+
 import com.example.SafeCare.Entites.Product;
 import com.example.SafeCare.Entites.UnitOfMeasurement;
 import com.example.SafeCare.Exception.IoExceptionCustom;
@@ -43,7 +41,7 @@ try{
         return unitOfMeasurementResponseDTO;
     }else{
         log.warn(unit+"is already exist");
-        throw new ValidationException("200","unit is already exist","0");
+        throw new ValidationException("400","unit is already exist","1");
     }
 }catch (ValidationException vx){
     throw vx;
@@ -71,7 +69,7 @@ try{
             UnitOfMeasurement unitOfMeasurement=unitOfMeasurementOptional.get();
             Optional<UnitOfMeasurement> unitOfMeasurementOptional1=Optional.ofNullable(unitOfMeasurementRepo.findName(newName));
             if(unitOfMeasurementOptional1.isPresent()){
-                throw new ValidationException("200","unit name is already present","0");
+                throw new ValidationException("400","unit name is already present","1");
             }
 
             unitOfMeasurement.setUnitOfMeasurementName(newName);
@@ -106,7 +104,7 @@ try{
 
             for (Product product : productList) {
                 if (unitOfMeasurement.equals(product.getUnitMasherment())) {
-                    throw new ValidationException("200","unit is already in use","0");
+                    throw new ValidationException("400","unit is already in use","1");
                 }
             }
 
@@ -129,7 +127,7 @@ try{
     }
 
 
-    public List<UnitOfMeasurementResponseDTO> allUnits() throws customException {
+    public List<UnitOfMeasurementResponseDTO> allUnits() throws Exception {
   try{
       List<UnitOfMeasurement> unitOfMeasurements=unitOfMeasurementRepo.findAll();
       List<UnitOfMeasurementResponseDTO> unitList=new ArrayList<>();

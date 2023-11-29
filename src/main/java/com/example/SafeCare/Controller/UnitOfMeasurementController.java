@@ -26,7 +26,7 @@ public class UnitOfMeasurementController {
     GenerateGlobalResponse generateGlobalResponse;
 
     @PostMapping("/add")
-    public ResponseEntity<String> addUnitOfmeasurment(@RequestParam String UnitOfMeaseurement) throws Exception {
+    public ResponseEntity addUnitOfmeasurment(@RequestParam String UnitOfMeaseurement) throws Exception {
         try {
             return new ResponseEntity(generateGlobalResponse.generateGlobalResponse(unitOfMeasurementServices.addUnitOfMeasurement(UnitOfMeaseurement), "2"
                     ,"200","Unit added successfully"),HttpStatus.OK);
@@ -56,7 +56,7 @@ public class UnitOfMeasurementController {
 
 
     @PutMapping("/edit")
-    public ResponseEntity<String> editunitofmeasurment(@RequestParam Integer id, @RequestParam String newName){
+    public ResponseEntity editunitofmeasurment(@RequestParam Integer id, @RequestParam String newName){
         try {
             return new ResponseEntity(generateGlobalResponse.generateGlobalResponse(unitOfMeasurementServices.editUnitOfMeasurement(id,newName), "2"
                     ,"200","Unit updated"),HttpStatus.OK);
@@ -84,7 +84,7 @@ public class UnitOfMeasurementController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteUnitOfMeasurement(@RequestParam Integer id){
+    public ResponseEntity deleteUnitOfMeasurement(@RequestParam Integer id){
 
         try {
             return new ResponseEntity(generateGlobalResponse.generateGlobalResponse(unitOfMeasurementServices.DeleteUnitOfMeasurement(id), "2"
@@ -114,7 +114,7 @@ public class UnitOfMeasurementController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<String>> allunits(){
+    public ResponseEntity allunits(){
         try {
             return new ResponseEntity(generateGlobalResponse.generateGlobalResponse(unitOfMeasurementServices.allUnits(), "2"
                     ,"200","Category deleted"),HttpStatus.OK);

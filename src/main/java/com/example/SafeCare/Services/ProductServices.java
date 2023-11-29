@@ -1,10 +1,7 @@
 package com.example.SafeCare.Services;
 
 
-import com.example.SafeCare.CustomException.CategoryNotFound;
-import com.example.SafeCare.CustomException.ProductNotException;
-import com.example.SafeCare.CustomException.UnitNotException;
-import com.example.SafeCare.CustomException.customException;
+
 import com.example.SafeCare.Entites.Category;
 import com.example.SafeCare.Entites.Product;
 import com.example.SafeCare.Entites.UnitOfMeasurement;
@@ -75,7 +72,7 @@ try{
         return productResponseDTO;
     }else{
         logger.warn("the product name is already exist");
-        throw new ValidationException("200","The product name is already exist","0");
+        throw new ValidationException("400","The product name is already exist","1");
     }
 
 }catch (IoExceptionCustom ex){
@@ -106,7 +103,7 @@ try{
             Optional<Product> product2= Optional.ofNullable(productRepo.findName(productDTO.getProductName()));
 
             if(product2.isPresent()){
-                throw new ValidationException("200","product name is already present","0");
+                throw new ValidationException("400","product name is already present","1");
             }
             Optional<Category> category= Optional.ofNullable(categoryRepo.findName(productDTO.getCategory()));
             if(!category.isPresent()){

@@ -53,7 +53,7 @@ GenerateGlobalResponse generateGlobalResponse;
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<String> editCategory(@RequestParam Integer id ,@RequestParam String NewName){
+    public ResponseEntity editCategory(@RequestParam Integer id ,@RequestParam String NewName){
         try {
             return new ResponseEntity(generateGlobalResponse.generateGlobalResponse(categoryServices.editCategory(id,NewName), "2"
                     ,"200","Category updated"),HttpStatus.OK);
@@ -81,7 +81,7 @@ GenerateGlobalResponse generateGlobalResponse;
 
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> DeleteCategory(@RequestParam Integer id){
+    public ResponseEntity DeleteCategory(@RequestParam Integer id){
         try {
             return new ResponseEntity(generateGlobalResponse.generateGlobalResponse(categoryServices.DeleteCategory(id), "2"
                     ,"200","Category deleted"),HttpStatus.OK);
@@ -109,7 +109,7 @@ GenerateGlobalResponse generateGlobalResponse;
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<String>> allCategory(){
+    public ResponseEntity allCategory(){
         try {
             return new ResponseEntity(generateGlobalResponse.generateGlobalResponse(categoryServices.allCategory(), "2"
                     ,"200","Category deleted"),HttpStatus.OK);
